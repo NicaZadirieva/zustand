@@ -25,7 +25,7 @@ const data: TodoItem[] = [
     key: "4"
   },
 ];
-const initialTargetKeys = data.filter((item) => !item.isCompleted).map((item) => item.key);
+const initialTargetKeys = data.filter((item) => item.isCompleted).map((item) => item.key);
 const App: React.FC = () => {
   const [selectedKeys, setSelectedKeys] = useState<TransferProps["targetKeys"]>(
     []
@@ -57,7 +57,7 @@ const App: React.FC = () => {
   return (
     <Transfer
       dataSource={data}
-      titles={["Done", "Process"]}
+      titles={["Process", "Done"]}
       
       targetKeys={targetKeys}
       selectedKeys={selectedKeys}
