@@ -1,38 +1,14 @@
 import { Transfer, TransferProps } from "antd";
 import React, { useState } from "react";
 import "./index.css";
-import { TodoItem } from "./model/todoStore";
+import { useTodoStore } from "./model/todoStore";
 
-const data: TodoItem[] = [
-  {
-    title: "Title 1",
-    isCompleted: true,
-    key: "1"
-  },
-  {
-    title: "Title 2",
-    isCompleted: true,
-    key: "2"
-  },
-  {
-    title: "Title 3",
-    isCompleted: false,
-    key: "3"
-  },
-  {
-    title: "Title 4",
-    isCompleted: true,
-    key: "4"
-  },
-];
-const initialTargetKeys = data.filter((item) => item.isCompleted).map((item) => item.key);
 const App: React.FC = () => {
+
+  const { doneTasks, processingTasks, complete, startProcess } = useTodoStore();
   const [selectedKeys, setSelectedKeys] = useState<TransferProps["targetKeys"]>(
     []
   );
-
-  const [targetKeys, setTargetKeys] =
-    useState<TransferProps["targetKeys"]>(initialTargetKeys);
 
   const onChange: TransferProps["onChange"] = (
     nextTargetKeys,
@@ -42,27 +18,33 @@ const App: React.FC = () => {
     console.log("targetKeys:", nextTargetKeys);
     console.log("direction:", direction);
     console.log("moveKeys:", moveKeys);
-    setTargetKeys(nextTargetKeys);
+    if (direction == "left") {
+      startProcess(moveKeys);
+    } else {
+      complete(moveKeys);
+    }
   };
 
-  const onSelectChange: TransferProps["onSelectChange"] = (
-    sourceSelectedKeys,
-    targetSelectedKeys
-  ) => {
-    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
-  };
+   const onSelectChange: TransferProps["onSelectChange"] = (
+     sourceSelectedKeys,
+     targetSelectedKeys
+   ) => {
+     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
+   };
+
+ 
 
 
 
   return (
     <Transfer
-      dataSource={data}
+      dataSource={[...doneTasks, ...processingTasks]}
       titles={["Process", "Done"]}
-      
-      targetKeys={targetKeys}
+      onSelectChange={onSelectChange}
+      targetKeys={doneTasks.map((item) => item.key)}
       selectedKeys={selectedKeys}
       onChange={onChange}
-      onSelectChange={onSelectChange}
+
 
       render={(item) => <div key={item.title}>{item.title}</div>}
     />
