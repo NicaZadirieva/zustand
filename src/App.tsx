@@ -25,14 +25,14 @@ const data: TodoItem[] = [
     key: "4"
   },
 ];
-
+const initialTargetKeys = data.filter((item) => !item.isCompleted).map((item) => item.key);
 const App: React.FC = () => {
   const [selectedKeys, setSelectedKeys] = useState<TransferProps["targetKeys"]>(
     []
   );
 
   const [targetKeys, setTargetKeys] =
-    useState<TransferProps["targetKeys"]>([]);
+    useState<TransferProps["targetKeys"]>(initialTargetKeys);
 
   const onChange: TransferProps["onChange"] = (
     nextTargetKeys,
@@ -58,11 +58,12 @@ const App: React.FC = () => {
     <Transfer
       dataSource={data}
       titles={["Done", "Process"]}
+      
       targetKeys={targetKeys}
       selectedKeys={selectedKeys}
       onChange={onChange}
       onSelectChange={onSelectChange}
-      
+
       render={(item) => <div key={item.title}>{item.title}</div>}
     />
   );
