@@ -49,15 +49,10 @@ const App: React.FC = () => {
     sourceSelectedKeys,
     targetSelectedKeys
   ) => {
-    console.log("sourceSelectedKeys:", sourceSelectedKeys);
-    console.log("targetSelectedKeys:", targetSelectedKeys);
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
-  const onScroll: TransferProps["onScroll"] = (direction, e) => {
-    console.log("direction:", direction);
-    console.log("target:", e.target);
-  };
+
 
   return (
     <Transfer
@@ -67,7 +62,7 @@ const App: React.FC = () => {
       selectedKeys={selectedKeys}
       onChange={onChange}
       onSelectChange={onSelectChange}
-      onScroll={onScroll}
+      
       render={(item) => <div key={item.title}>{item.title}</div>}
     />
   );
