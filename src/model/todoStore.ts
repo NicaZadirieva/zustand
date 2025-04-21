@@ -16,6 +16,7 @@ type TodoItemState = {
 type TodoActions = {
     complete: (item: Key[]) => void;
     startProcess: (item: Key[]) => void;
+    addTodo: (item: TodoItem) => void;
 }
 
 function getAllTasks() {
@@ -60,6 +61,14 @@ const todoSlice: StateCreator<TodoItemState & TodoActions> = (set, get) => {
     return {
         doneTasks: getAllDoneTasks(),
         processingTasks: getProcessedTasks(),
+        addTodo: (item: TodoItem) => {
+          const { doneTasks, processingTasks } = get();
+          set({
+                    processingTasks: [...processingTasks, item],
+                    doneTasks
+                }
+            )
+        },
         complete: (moveKeys: Key[]) => {
             const { doneTasks, processingTasks } = get();
             
@@ -83,6 +92,7 @@ const todoSlice: StateCreator<TodoItemState & TodoActions> = (set, get) => {
 
 export const useTodoStore = create<TodoItemState & TodoActions>(todoSlice);
 export const addDoneTask = useTodoStore.getState().complete;
+export const addTodo = useTodoStore.getState().addTodo;
 export const startTask = () => useTodoStore.getState().startProcess;
 export const getDoneTask = () => useTodoStore.getState().doneTasks;
 export const getStartedTasks = () => useTodoStore.getState().processingTasks;
