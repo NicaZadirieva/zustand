@@ -4,6 +4,6 @@ export type CoffeeType = {
     subTitle: string;
     type: string;
     price: number;
-    imageUrl: string;
+    image: string;
     rating: number;
 }

@@ -1,8 +1,9 @@
+import axios from 'axios';
 import { create, StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { CoffeeType } from '../types/coffeeTypes';
 
-const BASE_URL = "https://purpleschool/coffee-api";
+const BASE_URL = "https://purpleschool.ru/coffee-api";
 
 type CoffeeState = {
     coffeeList?: CoffeeType[];
