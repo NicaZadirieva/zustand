@@ -1,28 +1,50 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Button, Card, Input, Rate, Tag } from 'antd';
-import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
+import { Button, Card, Input, Rate, Tag } from "antd";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import "./App.css";
 import "./index.css";
-import { useCoffeeStore } from './model/coffeeStore';
+import { useCoffeeStore } from "./model/coffeeStore";
 
 const App: React.FC = () => {
-  const { getCoffeeList, coffeeList, persistedOrderList, addCoffeeToOrder, clearCart } = useCoffeeStore();
+  const {
+    getCoffeeList,
+    coffeeList,
+    persistedOrderList,
+    addCoffeeToOrder,
+    clearCart,
+    createOrder,
+  } = useCoffeeStore();
   const [text, setText] = useState<string | undefined>();
+  const [address, setAddress] = useState<string | undefined>();
 
   useEffect(() => {
     getCoffeeList();
-  }, [getCoffeeList])
+  }, [getCoffeeList]);
 
   const findCoffee = (text: string) => {
     setText(text);
     getCoffeeList({ text });
   };
 
-  const handleSearch: ChangeEventHandler<HTMLInputElement> = (e: ChangeEvent) => {
+  const handleSearch: ChangeEventHandler<HTMLInputElement> = (
+    e: ChangeEvent
+  ) => {
     findCoffee((e.target as HTMLInputElement).value);
-  }
+  };
 
-  
+  const orderCart = async () => {
+    if (address) {
+      await createOrder({
+        address,
+      });
+    }
+  };
+
   return (
     <div className="wrapper">
       <Input placeholder="Поиск" value={text} onChange={handleSearch} />
@@ -72,8 +94,14 @@ const App: React.FC = () => {
                   </span>
                 );
               })}
-              <Input placeholder="адрес" />
-              <Button type="primary">Сделать заказ</Button>
+              <Input
+                placeholder="адрес"
+                value={address}
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                }}
+              />
+              <Button type="primary" onClick={orderCart}>Сделать заказ</Button>
               <Button onClick={clearCart}>Очистить корзину</Button>
             </>
           ) : (

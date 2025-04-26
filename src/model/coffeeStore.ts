@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { create, StateCreator } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CoffeeType, GetCoffeeListReqParams, OrderItem } from '../types/coffeeTypes';
+import { CoffeeType, GetCoffeeListReqParams, OrderCoffeeRes, OrderItem } from '../types/coffeeTypes';
 
 const BASE_URL = "https://purpleschool.ru/coffee-api";
 
@@ -15,12 +15,44 @@ type CoffeeActions = {
     getCoffeeList: (params?: GetCoffeeListReqParams) => void;
     addCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string }) => void;
     clearCart: () => void;
+    createOrder: ({ address } : {address: string}) => Promise<OrderCoffeeRes | void>;
 };
 
 const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/persist", unknown]]> = (set, get) => ({
     coffeeList: undefined,
     persistedOrderList: undefined,
     controller: undefined,
+    createOrder: async ({ address } : {address: string}) => {
+        const { controller, persistedOrderList } = get();
+        if (controller) {
+            controller.abort();
+        } 
+
+        const newController = new AbortController();
+        set({ controller: newController });
+        const { signal } = newController;
+        
+        try {
+            const requestBody = {
+                address,
+                orderItems: persistedOrderList
+            };
+
+            const { data }: { data: OrderCoffeeRes } = await axios.post(BASE_URL + "/order", {
+                ...requestBody, signal
+            });
+            if (data.success) {
+                return Promise.resolve();
+            } else {
+                return Promise.reject(data.message)
+            }
+        } catch (error) {
+            if (axios.isCancel(error)) {
+                return;
+            }
+            console.error(error);
+        }
+    },
     clearCart: () => {
         const state = get();
         set({...state, persistedOrderList: []});
