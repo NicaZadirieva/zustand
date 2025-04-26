@@ -39,9 +39,14 @@ const App: React.FC = () => {
 
   const orderCart = async () => {
     if (address) {
-      await createOrder({
-        address,
-      });
+      try {
+        await createOrder({
+          address,
+        });
+        alert("Выполнено успешно");
+      } catch {
+        alert("Повторите еще раз");
+      }
     }
   };
 
@@ -101,7 +106,7 @@ const App: React.FC = () => {
                   setAddress(e.target.value);
                 }}
               />
-              <Button type="primary" onClick={orderCart}>Сделать заказ</Button>
+              <Button type="primary" disabled={address == undefined || address.length == 0} onClick={orderCart}>Сделать заказ</Button>
               <Button onClick={clearCart}>Очистить корзину</Button>
             </>
           ) : (
