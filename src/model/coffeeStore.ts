@@ -13,7 +13,7 @@ type CoffeeState = {
 
 type CoffeeActions = {
     getCoffeeList: (params?: GetCoffeeListReqParams) => void;
-    saveCoffeeToOrder: ({ id, name } : { id: number; name: string; }) => void;
+    saveCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string }) => void;
     clearCart: () => void;
 };
 
@@ -25,16 +25,16 @@ const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/persist"
         const state = get();
         set({...state, persistedOrderList: []});
     },
-    saveCoffeeToOrder: ({ id, name } : { id: number; name: string; }) => {
+    saveCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string}) => {
         const { persistedOrderList } = get();
         let newPersistedOrderList = persistedOrderList;
         if (newPersistedOrderList == undefined) {
             newPersistedOrderList = [];
         } 
-        const foundOrderItemIndex: number | undefined = newPersistedOrderList.findIndex((orderItem) => {
+        const foundOrderItemIndex: number = newPersistedOrderList.findIndex((orderItem) => {
             return orderItem.id == id;
         })
-        if (foundOrderItemIndex) {
+        if (foundOrderItemIndex !== -1) {
             const foundOrderItem = newPersistedOrderList[foundOrderItemIndex];
             newPersistedOrderList.splice(foundOrderItemIndex, 1, {
                 ...foundOrderItem,
@@ -45,9 +45,11 @@ const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/persist"
                 id,
                 name,
                 quantity: 1,
-                size: "L"
+                size: "L",
+                subTitle
             })
         }
+        set({persistedOrderList: newPersistedOrderList})
     },
     getCoffeeList: async(params?: GetCoffeeListReqParams) => {
         const { controller } = get();

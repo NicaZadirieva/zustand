@@ -17,6 +17,7 @@ export type OrderItem = {
     name: string;
     size: "L",
     quantity: number;
+    subTitle: string;
 };
 
 export type OrderCoffeeReq = {

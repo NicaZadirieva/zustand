@@ -4,12 +4,11 @@ import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from "rea
 import "./App.css";
 import "./index.css";
 import { useCoffeeStore } from './model/coffeeStore';
-import { OrderItem } from './types/coffeeTypes';
 
 const App: React.FC = () => {
-  const { getCoffeeList, coffeeList } = useCoffeeStore();
+  const { getCoffeeList, coffeeList, persistedOrderList, saveCoffeeToOrder, clearCart } = useCoffeeStore();
   const [text, setText] = useState<string | undefined>();
-  const cart: OrderItem[] | undefined  = [];
+
   useEffect(() => {
     getCoffeeList();
   }, [getCoffeeList])
@@ -22,6 +21,7 @@ const App: React.FC = () => {
   const handleSearch: ChangeEventHandler<HTMLInputElement> = (e: ChangeEvent) => {
     findCoffee((e.target as HTMLInputElement).value);
   }
+
   
   return (<div className="wrapper">
     <Input placeholder='Поиск' value={text} onChange={handleSearch}/>
@@ -30,7 +30,7 @@ const App: React.FC = () => {
       {coffeeList && coffeeList.map((coffee) => {
         return (
           <Card key={coffee.id} cover={<img src={coffee.image} alt={coffee.name}
-          />} actions={[<Button icon={<ShoppingCartOutlined/>}>{coffee.price}</Button>]}>
+          />} actions={[<Button icon={<ShoppingCartOutlined/>} onClick={() => {saveCoffeeToOrder({ id: coffee.id, name: coffee.name, subTitle: coffee.subTitle})}}>{coffee.price}</Button>]}>
               <Card.Meta title={coffee.name} description={coffee.subTitle}/>
               <Tag color="purple" style={{marginTop: 12}}>{coffee.type}</Tag>
               <Rate defaultValue={coffee.rating} disabled allowHalf/>
@@ -40,14 +40,14 @@ const App: React.FC = () => {
     </div>
     <aside className="cart">
       <h1>Заказ</h1>
-      {cart && cart.length > 0 ? <>
-       {cart.map((item, index) => {
-        <span key={index}>{item.name}</span>
+      {persistedOrderList && persistedOrderList.length > 0 ? (<>
+       {persistedOrderList.map((item, index) => {
+        return <span key={index}>{item.name} {item.subTitle} - {item.quantity} шт.</span>;
        })}
        <Input placeholder='адрес'/>
        <Button type="primary">Сделать заказ</Button>
-       <Button>Очистить корзину</Button>
-      </> : <span>Добавьте напитки</span>}
+       <Button onClick={clearCart}>Очистить корзину</Button>
+      </>): <span>Добавьте напитки</span>}
     </aside>
     </div>
   </div>);
