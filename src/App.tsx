@@ -4,10 +4,12 @@ import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from "rea
 import "./App.css";
 import "./index.css";
 import { useCoffeeStore } from './model/coffeeStore';
+import { OrderItem } from './types/coffeeTypes';
 
 const App: React.FC = () => {
   const { getCoffeeList, coffeeList } = useCoffeeStore();
   const [text, setText] = useState<string | undefined>();
+  const cart: OrderItem[] | undefined  = [];
   useEffect(() => {
     getCoffeeList();
   }, [getCoffeeList])
@@ -23,6 +25,7 @@ const App: React.FC = () => {
   
   return (<div className="wrapper">
     <Input placeholder='Поиск' value={text} onChange={handleSearch}/>
+    <div style={{display: "flex"}}>
     <div className='cardsContainer'>
       {coffeeList && coffeeList.map((coffee) => {
         return (
@@ -34,6 +37,18 @@ const App: React.FC = () => {
           </Card>
         )
       })}
+    </div>
+    <aside className="cart">
+      <h1>Заказ</h1>
+      {cart && cart.length > 0 ? <>
+       {cart.map((item, index) => {
+        <span key={index}>{item.name}</span>
+       })}
+       <Input placeholder='адрес'/>
+       <Button type="primary">Сделать заказ</Button>
+       <Button>Очистить корзину</Button>
+      </> : <span>Добавьте напитки</span>}
+    </aside>
     </div>
   </div>);
 };
