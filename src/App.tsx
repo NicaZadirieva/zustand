@@ -1,6 +1,6 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Button, Card, Rate, Tag } from 'antd';
-import React, { useEffect } from "react";
+import { Button, Card, Input, Rate, Tag } from 'antd';
+import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import "./App.css";
 import "./index.css";
 import { useCoffeeStore } from './model/coffeeStore';
@@ -9,9 +9,18 @@ const App: React.FC = () => {
   const { getCoffeeList, coffeeList } = useCoffeeStore();
   useEffect(() => {
     getCoffeeList();
-  })
+  }, [getCoffeeList])
+
+  const findCoffee = (coffeeName: string) => {
+    getCoffeeList({text: coffeeName});
+  };
+
+  const handleSearch: KeyboardEventHandler<HTMLInputElement> = (e: KeyboardEvent) => {
+    findCoffee((e.target as HTMLInputElement).value);
+  }
   
   return (<div className="wrapper">
+    <Input placeholder='Поиск' onPressEnter={handleSearch}/>
     <div className='cardsContainer'>
       {coffeeList && coffeeList.map((coffee) => {
         return (

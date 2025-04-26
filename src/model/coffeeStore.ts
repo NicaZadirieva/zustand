@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { create, StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { CoffeeType } from '../types/coffeeTypes';
+import { CoffeeType, GetCoffeeListReqParams } from '../types/coffeeTypes';
 
 const BASE_URL = "https://purpleschool.ru/coffee-api";
 
@@ -10,14 +10,16 @@ type CoffeeState = {
 };
 
 type CoffeeActions = {
-    getCoffeeList: () => void;
+    getCoffeeList: (params?: GetCoffeeListReqParams) => void;
 };
 
 const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/devtools", never]]> = (set) => ({
     coffeeList: undefined,
-    getCoffeeList: async() => {
+    getCoffeeList: async(params?: GetCoffeeListReqParams) => {
         try {
-            const { data } = await axios.get(BASE_URL);
+            const { data } = await axios.get(BASE_URL, {
+                params
+            });
             set({coffeeList: data});
         } catch (error) {
             console.error(error);
