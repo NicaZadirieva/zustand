@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { create, StateCreator } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { CoffeeType, GetCoffeeListReqParams, OrderCoffeeRes, OrderItem } from '../types/coffeeTypes';
 
 const BASE_URL = "https://purpleschool.ru/coffee-api";
@@ -18,7 +18,7 @@ type CoffeeActions = {
     createOrder: ({ address } : {address: string}) => Promise<OrderCoffeeRes | void>;
 };
 
-const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/persist", unknown]]> = (set, get) => ({
+const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [ ["zustand/devtools", never], ["zustand/persist", unknown]]> = (set, get) => ({
     coffeeList: undefined,
     persistedOrderList: undefined,
     controller: undefined,
@@ -107,7 +107,14 @@ const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/persist"
     }
 })
 
-export const useCoffeeStore = create<CoffeeActions & CoffeeState>()(persist(coffeeSlice, {
-    name: 'coffeeStore',
-    partialize: (state) => ({persistedOrderList: state.persistedOrderList})
-}));
+export const useCoffeeStore = create<CoffeeActions & CoffeeState>()(
+  devtools(
+    persist(coffeeSlice, {
+      name: "coffeeStore",
+      partialize: (state) => ({ persistedOrderList: state.persistedOrderList }),
+    }),
+    {
+      name: "coffeeStore"
+    }
+  )
+);
