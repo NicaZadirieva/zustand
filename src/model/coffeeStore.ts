@@ -13,7 +13,7 @@ type CoffeeState = {
 
 type CoffeeActions = {
     getCoffeeList: (params?: GetCoffeeListReqParams) => void;
-    saveCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string }) => void;
+    addCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string }) => void;
     clearCart: () => void;
 };
 
@@ -25,7 +25,7 @@ const coffeeSlice: StateCreator<CoffeeActions & CoffeeState, [["zustand/persist"
         const state = get();
         set({...state, persistedOrderList: []});
     },
-    saveCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string}) => {
+    addCoffeeToOrder: ({ id, name, subTitle } : { id: number; name: string; subTitle: string}) => {
         const { persistedOrderList } = get();
         let newPersistedOrderList = persistedOrderList;
         if (newPersistedOrderList == undefined) {

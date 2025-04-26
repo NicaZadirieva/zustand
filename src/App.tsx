@@ -6,7 +6,7 @@ import "./index.css";
 import { useCoffeeStore } from './model/coffeeStore';
 
 const App: React.FC = () => {
-  const { getCoffeeList, coffeeList, persistedOrderList, saveCoffeeToOrder, clearCart } = useCoffeeStore();
+  const { getCoffeeList, coffeeList, persistedOrderList, addCoffeeToOrder, clearCart } = useCoffeeStore();
   const [text, setText] = useState<string | undefined>();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const App: React.FC = () => {
                     <Button
                       icon={<ShoppingCartOutlined />}
                       onClick={() => {
-                        saveCoffeeToOrder({
+                        addCoffeeToOrder({
                           id: coffee.id,
                           name: coffee.name,
                           subTitle: coffee.subTitle,
