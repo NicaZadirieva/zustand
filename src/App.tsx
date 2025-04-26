@@ -1,26 +1,28 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Card, Input, Rate, Tag } from 'antd';
-import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
+import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
 import "./App.css";
 import "./index.css";
 import { useCoffeeStore } from './model/coffeeStore';
 
 const App: React.FC = () => {
   const { getCoffeeList, coffeeList } = useCoffeeStore();
+  const [text, setText] = useState<string | undefined>();
   useEffect(() => {
     getCoffeeList();
   }, [getCoffeeList])
 
-  const findCoffee = (coffeeName: string) => {
-    getCoffeeList({text: coffeeName});
+  const findCoffee = (text: string) => {
+    setText(text);
+    getCoffeeList({ text });
   };
 
-  const handleSearch: KeyboardEventHandler<HTMLInputElement> = (e: KeyboardEvent) => {
+  const handleSearch: ChangeEventHandler<HTMLInputElement> = (e: ChangeEvent) => {
     findCoffee((e.target as HTMLInputElement).value);
   }
   
   return (<div className="wrapper">
-    <Input placeholder='Поиск' onPressEnter={handleSearch}/>
+    <Input placeholder='Поиск' value={text} onChange={handleSearch}/>
     <div className='cardsContainer'>
       {coffeeList && coffeeList.map((coffee) => {
         return (
