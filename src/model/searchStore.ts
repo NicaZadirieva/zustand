@@ -1,5 +1,6 @@
 import { create, StateCreator } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { hashStorage } from '../helpers/hashStorage';
 import { getCoffeeList } from './coffeeStore';
 
 type SearchState = {
@@ -10,7 +11,7 @@ type SearchActions = {
     setText: (text: string) => void;
 };
 
-const searchSlice : StateCreator<SearchState & SearchActions, [ ["zustand/devtools", never]/*, ["zustand/persist", unknown]*/]> = (set) => ({
+const searchSlice : StateCreator<SearchState & SearchActions, [ ["zustand/devtools", never], ["zustand/persist", unknown]]> = (set) => ({
     text: undefined,
     setText: (text) => {
         set({ text }, false, "setText");
@@ -18,7 +19,7 @@ const searchSlice : StateCreator<SearchState & SearchActions, [ ["zustand/devtoo
 })
 
 export const useSearchStore = create<SearchState & SearchActions>()(
-    devtools(searchSlice, { name: 'SearchStore'})
+    devtools(persist(searchSlice, { name: 'SearchStore', storage: createJSONStorage(() => hashStorage)}), { name: 'SearchStore'})
 );
 
 useSearchStore.subscribe((state, prevState) => {
