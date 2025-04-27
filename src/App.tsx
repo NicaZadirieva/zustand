@@ -1,14 +1,13 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Card, Input, Rate, Tag } from "antd";
 import React, {
-  ChangeEvent,
-  ChangeEventHandler,
   useEffect,
-  useState,
+  useState
 } from "react";
 import "./App.css";
 import "./index.css";
 import { useCoffeeStore } from "./model/coffeeStore";
+import { useSearchStore } from './model/searchStore';
 
 const App: React.FC = () => {
   const {
@@ -19,23 +18,12 @@ const App: React.FC = () => {
     clearCart,
     createOrder,
   } = useCoffeeStore();
-  const [text, setText] = useState<string | undefined>();
+  const { text, setText } = useSearchStore();
   const [address, setAddress] = useState<string | undefined>();
 
   useEffect(() => {
-    getCoffeeList();
-  }, [getCoffeeList]);
-
-  const findCoffee = (text: string) => {
-    setText(text);
     getCoffeeList({ text });
-  };
-
-  const handleSearch: ChangeEventHandler<HTMLInputElement> = (
-    e: ChangeEvent
-  ) => {
-    findCoffee((e.target as HTMLInputElement).value);
-  };
+  }, [getCoffeeList, text]);
 
   const orderCart = async () => {
     if (address) {
@@ -52,7 +40,7 @@ const App: React.FC = () => {
 
   return (
     <div className="wrapper">
-      <Input placeholder="Поиск" value={text} onChange={handleSearch} />
+      <Input placeholder="Поиск" value={text} onChange={(e) => setText(e.target.value)} />
       <div style={{ display: "flex" }}>
         <div className="cardsContainer">
           {coffeeList &&
