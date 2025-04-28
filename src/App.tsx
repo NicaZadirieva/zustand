@@ -5,9 +5,9 @@ import React, {
   useState
 } from "react";
 import "./App.css";
+import { useUrlStorage } from './helpers/useUrlStorage';
 import "./index.css";
 import { useCoffeeStore } from "./model/coffeeStore";
-import { useSearchStore } from './model/searchStore';
 
 const App: React.FC = () => {
   const {
@@ -17,14 +17,17 @@ const App: React.FC = () => {
     addCoffeeToOrder,
     clearCart,
     createOrder,
+    params,
+    setParams
   } = useCoffeeStore();
-  const { text, setText } = useSearchStore();
+
   const [address, setAddress] = useState<string | undefined>();
 
   useEffect(() => {
-    getCoffeeList({ text });
-  }, [getCoffeeList, text]);
+    getCoffeeList(params);
+  }, [getCoffeeList, params]);
 
+  useUrlStorage(params, setParams);
   const orderCart = async () => {
     if (address) {
       try {
@@ -40,7 +43,7 @@ const App: React.FC = () => {
 
   return (
     <div className="wrapper">
-      <Input placeholder="Поиск" value={text} onChange={(e) => setText(e.target.value)} />
+      <Input placeholder="Поиск" value={params.text} onChange={(e) => setParams({ text: e.target.value })} />
       <div style={{ display: "flex" }}>
         <div className="cardsContainer">
           {coffeeList &&
