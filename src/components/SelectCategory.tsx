@@ -1,15 +1,15 @@
 import { Select } from "antd";
+import { useShallow } from 'zustand/shallow';
+import { setParams, useCoffeeStore } from '../model/coffeeStore';
 import { CoffeeCategoryEnum } from '../types/coffeeTypes';
 
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
 export const SelectCategory = () => {
+    const [ params ] = useCoffeeStore(useShallow((s) => [s.params]));
     const options = [
+        {
+            value: null,
+            label: 'Все категории'
+        },
         {
             value: CoffeeCategoryEnum.americano,
             label: 'американо'
@@ -30,10 +30,10 @@ export const SelectCategory = () => {
   return (
     <Select
       showSearch
+      defaultActiveFirstOption={true}
       placeholder="Выберите категорию напитка"
       optionFilterProp="label"
-      onChange={onChange}
-      onSearch={onSearch}
+      onChange={(value) => {setParams({...params, type: value == null ? undefined : value})}}
       options={options}
     />
   );
