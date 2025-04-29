@@ -25,6 +25,11 @@ export const useUrlStorage = <T extends Record<string, string>>(
         const newQueryParams = new URLSearchParams();
         if (params.text) {
             newQueryParams.set('text', params.text);
+        }
+        if (params.type) {
+            newQueryParams.set('type', params.type);
+        }
+        if (params.text || params.type) {
             setQueryParams(newQueryParams);
         }
 
