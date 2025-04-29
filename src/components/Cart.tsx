@@ -1,8 +1,9 @@
 import { Button, Input } from 'antd';
-import { useCoffeeStore } from '../model/coffeeStore';
+import { useShallow } from 'zustand/shallow';
+import { clearCart, createOrder, setAddress, useCoffeeStore } from '../model/coffeeStore';
 
 export const Cart = () => {
-    const { persistedOrderList, createOrder, clearCart, address, setAddress } = useCoffeeStore();
+    const [ persistedOrderList, address ] = useCoffeeStore(useShallow(state => [state.persistedOrderList, state.address]));
 
     const orderCart = async () => {
     if (address) {
