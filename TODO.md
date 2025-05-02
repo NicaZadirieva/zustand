@@ -5,3 +5,4 @@
 5. Получение методов стора как функции. То есть, что-то похожее:
    export const getCoffeeList = (params?: GetCoffeeListReqParams) =>
    useCoffeeStore.getState().getCoffeeList(params);
+6. Централизованный сброс состояний
