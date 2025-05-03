@@ -5,7 +5,7 @@ import { setParams } from '../model/listSlice';
 import { CoffeeCategoryEnum } from '../types/coffeeTypes';
 
 export const SelectCategory = () => {
-    const [ params ] = useSelector((s: RootState) => [s.list.params]);
+    const params = useSelector((s: RootState) => s.list.params);
     const options = [
         {
             value: null,

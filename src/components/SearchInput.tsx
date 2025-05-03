@@ -6,7 +6,7 @@ import { appDispatch, RootState } from '../model/coffeeStore';
 import { getCoffeeList, setParams } from '../model/listSlice';
 
 export const SearchInput = () => {
-  const [ params ] = useSelector((s: RootState) => [s.list.params]);
+  const  params  = useSelector((s: RootState) => s.list.params);
   const dispatch = useDispatch<appDispatch>();
   useUrlStorage(params, setParams);
   useEffect(() => {

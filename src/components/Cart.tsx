@@ -6,10 +6,12 @@ import { OrderItem } from "../types/coffeeTypes";
 
 export const Cart = () => {
   const dispatch = useDispatch<appDispatch>();
-  const [persistedOrderList, address] = useSelector((state: RootState) => [
-    state.cart.persistedOrderList,
-    state.cart.address,
-  ]);
+  const  persistedOrderList = useSelector((state: RootState) => (
+    state.cart.persistedOrderList
+  ));
+  const  address = useSelector((state: RootState) => (
+    state.cart.address
+  ));
 
   const orderCart = async () => {
     if (address) {
