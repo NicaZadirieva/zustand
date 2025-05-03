@@ -1,10 +1,11 @@
 import { Select } from "antd";
-import { useShallow } from 'zustand/shallow';
-import { setParams, useCoffeeStore } from '../model/coffeeStore';
+import { useSelector } from 'react-redux';
+import { RootState } from '../model/coffeeStore';
+import { setParams } from '../model/listSlice';
 import { CoffeeCategoryEnum } from '../types/coffeeTypes';
 
 export const SelectCategory = () => {
-    const [ params ] = useCoffeeStore(useShallow((s) => [s.params]));
+    const [ params ] = useSelector((s: RootState) => [s.list.params]);
     const options = [
         {
             value: null,

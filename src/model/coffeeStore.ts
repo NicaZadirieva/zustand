@@ -1,10 +1,18 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
-import { GetCoffeeListReqParams } from "../types/coffeeTypes";
-import { cartSlice } from "./cartSlice";
-import { listSlice } from "./listSlice";
-import { CartActions, CartState, ListActions, ListState } from "./storeTypes";
+import { combineSlices, configureStore } from '@reduxjs/toolkit';
+import { cartSlice } from './cartSlice';
+import { listSlice } from './listSlice';
 
+export const coffeeReducer = combineSlices(cartSlice, listSlice, {
+  cart: cartSlice.reducer,
+  list: listSlice.reducer,
+})
+
+
+
+export const store = configureStore({ reducer: coffeeReducer });
+export type RootState = ReturnType<typeof store.getState>;
+export type appDispatch = typeof store.dispatch;
+/*
 export const useCoffeeStore = create<
   CartActions & CartState & ListActions & ListState
 >()(
@@ -20,8 +28,8 @@ export const useCoffeeStore = create<
       name: "coffeeStore",
     }
   )
-);
-
+);*/
+/*
 export const getCoffeeList = (params?: GetCoffeeListReqParams) =>
   useCoffeeStore.getState().getCoffeeList(params);
 export const setParams = (params?: GetCoffeeListReqParams) =>
@@ -40,3 +48,4 @@ export const addCoffeeToOrder = ({
   name: string;
   subTitle: string;
 }) => useCoffeeStore.getState().addCoffeeToOrder({ id, name, subTitle });
+*/

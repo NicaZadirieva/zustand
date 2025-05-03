@@ -1,11 +1,12 @@
 import { Input } from "antd";
 import { useEffect } from 'react';
-import { useShallow } from 'zustand/shallow';
+import { useSelector } from 'react-redux';
 import { useUrlStorage } from '../helpers/useUrlStorage';
-import { getCoffeeList, setParams, useCoffeeStore } from "../model/coffeeStore";
+import { RootState } from '../model/coffeeStore';
+import { getCoffeeList, setParams } from '../model/listSlice';
 
 export const SearchInput = () => {
-  const [ params ] = useCoffeeStore(useShallow((s) => [s.params]));
+  const [ params ] = useSelector((s: RootState) => [s.list.params]);
   useUrlStorage(params, setParams);
   useEffect(() => {
       getCoffeeList(params);

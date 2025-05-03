@@ -1,15 +1,20 @@
+
 import { Button, Input } from 'antd';
-import { useShallow } from 'zustand/shallow';
-import { clearCart, createOrder, setAddress, useCoffeeStore } from '../model/coffeeStore';
+import { useSelector } from 'react-redux';
+import { clearCart, createOrder, setAddress } from '../model/cartSlice';
+import { RootState } from '../model/coffeeStore';
+import { OrderItem } from '../types/coffeeTypes';
+
 
 export const Cart = () => {
-    const [ persistedOrderList, address ] = useCoffeeStore(useShallow(state => [state.persistedOrderList, state.address]));
+    const [ persistedOrderList, address ] = useSelector((state: RootState) => [state.cart.persistedOrderList, state.cart.address]);
 
     const orderCart = async () => {
     if (address) {
       try {
-        await createOrder({
-          address,
+        createOrder({
+          address: address as string,
+          persistedOrderList: persistedOrderList as OrderItem[]
         });
         alert("Выполнено успешно");
       } catch {
@@ -22,7 +27,7 @@ export const Cart = () => {
           <h1>Заказ</h1>
           {persistedOrderList && persistedOrderList.length > 0 ? (
             <>
-              {persistedOrderList.map((item, index) => {
+              {(persistedOrderList as OrderItem[]).map((item, index) => {
                 return (
                   <span key={index}>
                     {item.name} {item.subTitle} - {item.quantity} шт.
@@ -31,7 +36,7 @@ export const Cart = () => {
               })}
               <Input
                 placeholder="адрес"
-                value={address}
+                value={address as string}
                 onChange={(e) => {
                   setAddress(e.target.value);
                 }}
