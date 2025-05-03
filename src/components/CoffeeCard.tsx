@@ -1,9 +1,12 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Card, Rate, Tag } from "antd";
+import { useDispatch } from 'react-redux';
 import { addCoffeeToOrder } from '../model/cartSlice';
+import { appDispatch } from '../model/coffeeStore';
 import { CoffeeType } from "../types/coffeeTypes";
 
 export const CoffeeCard = ({ coffee }: { coffee: CoffeeType }) => {
+  const dispatch = useDispatch<appDispatch>();
   return (
     <Card
 
@@ -12,11 +15,11 @@ export const CoffeeCard = ({ coffee }: { coffee: CoffeeType }) => {
         <Button
           icon={<ShoppingCartOutlined />}
           onClick={() => {
-            addCoffeeToOrder({
+            dispatch(addCoffeeToOrder({
               id: coffee.id,
               name: coffee.name,
               subTitle: coffee.subTitle,
-            });
+            }));
           }}
         >
           {coffee.price}

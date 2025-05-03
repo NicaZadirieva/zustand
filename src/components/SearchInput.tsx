@@ -1,15 +1,16 @@
 import { Input } from "antd";
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useUrlStorage } from '../helpers/useUrlStorage';
-import { RootState } from '../model/coffeeStore';
+import { appDispatch, RootState } from '../model/coffeeStore';
 import { getCoffeeList, setParams } from '../model/listSlice';
 
 export const SearchInput = () => {
   const [ params ] = useSelector((s: RootState) => [s.list.params]);
+  const dispatch = useDispatch<appDispatch>();
   useUrlStorage(params, setParams);
   useEffect(() => {
-      getCoffeeList(params);
+      dispatch(getCoffeeList(params));
     }, [params]);
   
   return (
