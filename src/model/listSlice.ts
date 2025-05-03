@@ -13,22 +13,22 @@ const initialState: ListState = {
 };
 export const getCoffeeList = createAsyncThunk(
   "list/getCoffeeList",
-  async (params?: GetCoffeeListReqParams, controller?: AbortController) => {
-    if (controller) {
+  async (params?: GetCoffeeListReqParams, /*controller?: AbortController*/) => {
+    /*if (controller) {
       controller.abort();
     }
 
     const newController = new AbortController();
     const { signal } = newController;
-
+*/
     try {
       const { data } = await axios.get(BASE_URL, {
         params,
-        signal,
+       // signal,
       });
 
       return Promise.resolve({
-        controller: newController,
+        //controller: newController,
         coffeeList: data,
       });
     } catch (error) {
@@ -46,7 +46,7 @@ export const listSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCoffeeList.fulfilled, (state, action) => {
       state.coffeeList = action.payload?.coffeeList;
-      state.controller = action.payload?.controller;
+      //state.controller = action.payload?.controller;
     });
     builder.addCase(getCoffeeList.rejected, (state, action) => {
       console.error("Произошла ошибка", action.payload);
