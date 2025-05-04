@@ -1,6 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { produce } from 'immer';
 import { BASE_URL } from "../api/CoreApi";
 import { loadState } from '../helpers/hashStorage';
 import { OrderCoffeeRes, OrderItem } from "../types/coffeeTypes";
@@ -70,32 +71,28 @@ export const cartSlice = createSlice({
         subTitle: string;
       }>
     ) => {
-      const persistedOrderList = state.persistedOrderList;
-      let newPersistedOrderList = persistedOrderList;
-      if (newPersistedOrderList == undefined) {
-        newPersistedOrderList = [];
-      }
-      const foundOrderItemIndex: number = newPersistedOrderList.findIndex(
-        (orderItem) => {
-          return orderItem.id == action.payload.id;
+      return produce<CartState>(state, (draftState) => {
+        if (!draftState.persistedOrderList) {
+          draftState.persistedOrderList = [];
         }
-      );
-      if (foundOrderItemIndex !== -1) {
-        const foundOrderItem = newPersistedOrderList[foundOrderItemIndex];
-        newPersistedOrderList.splice(foundOrderItemIndex, 1, {
-          ...foundOrderItem,
-          quantity: foundOrderItem.quantity + 1,
-        });
-      } else {
-        newPersistedOrderList.push({
-          id: action.payload.id,
-          name: action.payload.name,
-          quantity: 1,
-          size: "L",
-          subTitle: action.payload.subTitle,
-        });
-      }
-      state.persistedOrderList = newPersistedOrderList;
+        const foundOrderItemIndex: number = draftState.persistedOrderList.findIndex(
+          (orderItem) => {
+            return orderItem.id == action.payload.id;
+          }
+        );
+        if (foundOrderItemIndex !== -1) {
+          draftState.persistedOrderList[foundOrderItemIndex].quantity += 1;
+        } else {
+          draftState.persistedOrderList.push({
+            id: action.payload.id,
+            name: action.payload.name,
+            quantity: 1,
+            size: "L",
+            subTitle: action.payload.subTitle,
+          });
+        }
+       
+      })
     },
   },
 });
