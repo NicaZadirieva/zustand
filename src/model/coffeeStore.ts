@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { immer } from 'zustand/middleware/immer';
 import { CoffeeType, GetCoffeeListReqParams } from "../types/coffeeTypes";
 import { cartSlice } from "./cartSlice";
 import { listSlice } from "./listSlice";
@@ -9,7 +10,8 @@ export const useCoffeeStore = create<
   CartActions & CartState & ListActions & ListState
 >()(
   devtools(
-    persist((...arg) => ({ ...listSlice(...arg), ...cartSlice(...arg) }), {
+    persist(
+      immer((...arg) => ({ ...listSlice(...arg), ...cartSlice(...arg) })), {
       name: "coffeeStore",
       partialize: (state) => ({
         persistedOrderList: state.persistedOrderList,
