@@ -1,3 +1,4 @@
+import { composeWithDevTools } from '@redux-devtools/extension';
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { cartSlice } from './cartSlice';
 import { listSlice } from './listSlice';
@@ -9,7 +10,17 @@ export const coffeeReducer = combineSlices(cartSlice, listSlice, {
 
 
 
-export const store = configureStore({ reducer: coffeeReducer });
+export const store = configureStore({ reducer: coffeeReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  enhancers: (getDefaultEnhancers) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((window as any).devToolsExtension) {
+      return getDefaultEnhancers({
+    }).concat(composeWithDevTools());
+    }
+    return getDefaultEnhancers();
+  }
+ });
 export type RootState = ReturnType<typeof store.getState>;
 export type appDispatch = typeof store.dispatch;
 /*
