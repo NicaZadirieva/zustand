@@ -1,19 +1,21 @@
-import { StateStorage } from 'zustand/middleware'
+// скопировано из материалов лекций purpleschool
 
-export const hashStorage: StateStorage = {
-  getItem: (key): string => {
-    const searchParams = new URLSearchParams(location.hash.slice(1))
-    const storedValue = searchParams.get(key) ?? ''
-    return JSON.parse(storedValue)
-  },
-  setItem: (key, newValue): void => {
-    const searchParams = new URLSearchParams(location.hash.slice(1))
-    searchParams.set(key, JSON.stringify(newValue))
-    location.hash = searchParams.toString()
-  },
-  removeItem: (key): void => {
-    const searchParams = new URLSearchParams(location.hash.slice(1))
-    searchParams.delete(key)
-    location.hash = searchParams.toString()
-  },
+// утильные функции для работы с localStorage в проектах с redux
+
+export function loadState<T>(key: string) : T | undefined{
+	try {
+		const serializedState = localStorage.getItem(key);
+		if (serializedState === null) {
+			return undefined;
+		}
+		return JSON.parse(serializedState);
+	} catch (err) {
+		console.error('Error loading state:', err);
+		return undefined;
+	}
+}
+
+export function saveState<T>(state: T, key: string) {
+	const serializedState = JSON.stringify(state);
+	localStorage.setItem(key, serializedState);
 }

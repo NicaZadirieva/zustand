@@ -2,13 +2,16 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../api/CoreApi";
+import { loadState } from '../helpers/hashStorage';
 import { OrderCoffeeRes, OrderItem } from "../types/coffeeTypes";
 import { CartState } from "./storeTypes";
 
-const initialState: CartState = {
+export const CART_PERSISTENT_STATE = 'cart';
+const simpleInitialData: CartState = {
   persistedOrderList: undefined,
   address: undefined,
 };
+const initialState : CartState = loadState<CartState>(CART_PERSISTENT_STATE) ?? simpleInitialData;
 
 export const createOrder = createAsyncThunk(
     'cart/createOrder',

@@ -1,16 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../api/CoreApi";
+import { loadState } from '../helpers/hashStorage';
 import { GetCoffeeListReqParams } from "../types/coffeeTypes";
 import { ListState } from "./storeTypes";
 
-const initialState: ListState = {
+export const LIST_PERSISTENT_STATE = 'coffeeList';
+const simpleInitialData: ListState = {
   coffeeList: undefined,
   controller: undefined,
   params: {
     text: undefined,
   },
 };
+const initialState : ListState = loadState<ListState>(LIST_PERSISTENT_STATE) ?? simpleInitialData;
 export const getCoffeeList = createAsyncThunk(
   "list/getCoffeeList",
   async (params?: GetCoffeeListReqParams, /*controller?: AbortController*/) => {
