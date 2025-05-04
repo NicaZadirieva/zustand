@@ -44,7 +44,7 @@ export const Cart = () => {
             placeholder="адрес"
             value={address as string}
             onChange={(e) => {
-              setAddress(e.target.value);
+              dispatch(setAddress(e.target.value));
             }}
           />
           <Button

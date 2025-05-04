@@ -35,7 +35,8 @@ export const SelectCategory = () => {
       defaultActiveFirstOption={true}
       placeholder="Выберите категорию напитка"
       optionFilterProp="label"
-      onChange={(value) => {dispatch(setParams({...params, type: value == null ? undefined : value}))}}
+      onChange={(value) => {
+        dispatch(setParams({...params, type: value == null ? undefined : value}));}}
       options={options}
     />
   );

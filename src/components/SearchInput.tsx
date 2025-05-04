@@ -1,18 +1,20 @@
 import { Input } from "antd";
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useUrlStorage } from '../helpers/useUrlStorage';
-import { appDispatch, RootState } from '../model/coffeeStore';
-import { getCoffeeList, setParams } from '../model/listSlice';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useUrlStorage } from "../helpers/useUrlStorage";
+import { appDispatch, RootState } from "../model/coffeeStore";
+import { getCoffeeList, setParams } from "../model/listSlice";
 
 export const SearchInput = () => {
-  const  params  = useSelector((s: RootState) => s.list.params);
+  const params = useSelector((s: RootState) => s.list.params);
   const dispatch = useDispatch<appDispatch>();
-  useUrlStorage(params, (params) => dispatch(setParams(params)));
+  useUrlStorage(params, (newParams) => {
+    dispatch(setParams(newParams));
+  });
   useEffect(() => {
-      dispatch(getCoffeeList(params));
-    }, [params]);
-  
+    dispatch(getCoffeeList(params));
+  }, [params]);
+
   return (
     <Input
       placeholder="Поиск"

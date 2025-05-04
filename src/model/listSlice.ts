@@ -56,7 +56,7 @@ export const listSlice = createSlice({
     setParams: (state, action: PayloadAction<GetCoffeeListReqParams>) => {
       // TODO: можно ли в редакс использовать функции из стора в самом слайсе
       // const { getCoffeeList, params } = get();
-      state.params = action.payload;
+      state.params = {...state.params, ...action.payload};
       //getCoffeeList(params);
     },
   },
