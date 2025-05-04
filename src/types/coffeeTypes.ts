@@ -3,6 +3,7 @@ export enum CoffeeCategoryEnum {
     latte = 'latte',
     macchiato = 'macchiato',
     americano = 'americano',
+    all = 'all'
 }
 export type CoffeeType = {
     id: number;

@@ -7,8 +7,8 @@ export const SelectCategory = () => {
     const [ params ] = useCoffeeStore(useShallow((s) => [s.params]));
     const options = [
         {
-            value: null,
-            label: 'Все категории'
+            label: 'Все категории',
+            value: CoffeeCategoryEnum.all
         },
         {
             value: CoffeeCategoryEnum.americano,
@@ -33,7 +33,7 @@ export const SelectCategory = () => {
       defaultActiveFirstOption={true}
       placeholder="Выберите категорию напитка"
       optionFilterProp="label"
-      onChange={(value) => {setParams({...params, type: value == null ? undefined : value})}}
+      onChange={(value) => {setParams({...params, type: value == CoffeeCategoryEnum.all ? undefined : value})}}
       options={options}
     />
   );
