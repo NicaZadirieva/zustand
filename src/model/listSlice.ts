@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../api/CoreApi";
 import { loadState } from '../helpers/hashStorage';
-import { GetCoffeeListReqParams } from "../types/coffeeTypes";
+import { CoffeeType, GetCoffeeListReqParams } from "../types/coffeeTypes";
 import { ListState } from "./storeTypes";
 
 export const LIST_PERSISTENT_STATE = 'coffeeList';
@@ -62,9 +62,12 @@ export const listSlice = createSlice({
       state.params = {...state.params, ...action.payload};
       //getCoffeeList(params);
     },
+    setData: (state, action: PayloadAction<CoffeeType[]>) => {
+      state.coffeeList = action.payload;
+    }
   },
 });
 
 const { actions, reducer } = listSlice;
-export const { setParams } = actions;
+export const { setParams, setData } = actions;
 export default reducer

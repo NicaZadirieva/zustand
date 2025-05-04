@@ -39,5 +39,6 @@ export const store = configureStore({ reducer: coffeeReducer,
     LIST_PERSISTENT_STATE
   );
 });
+
 export type RootState = ReturnType<typeof store.getState>;
 export type appDispatch = typeof store.dispatch;
