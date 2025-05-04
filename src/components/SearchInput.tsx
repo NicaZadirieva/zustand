@@ -8,7 +8,7 @@ import { getCoffeeList, setParams } from '../model/listSlice';
 export const SearchInput = () => {
   const  params  = useSelector((s: RootState) => s.list.params);
   const dispatch = useDispatch<appDispatch>();
-  useUrlStorage(params, setParams);
+  useUrlStorage(params, (params) => dispatch(setParams(params)));
   useEffect(() => {
       dispatch(getCoffeeList(params));
     }, [params]);
@@ -17,7 +17,7 @@ export const SearchInput = () => {
     <Input
       placeholder="Поиск"
       value={params.text}
-      onChange={(e) => setParams({ text: e.target.value })}
+      onChange={(e) => dispatch(setParams({ text: e.target.value }))}
     />
   );
 };

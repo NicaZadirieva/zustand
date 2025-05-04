@@ -1,11 +1,12 @@
 import { Select } from "antd";
-import { useSelector } from 'react-redux';
-import { RootState } from '../model/coffeeStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { appDispatch, RootState } from '../model/coffeeStore';
 import { setParams } from '../model/listSlice';
 import { CoffeeCategoryEnum } from '../types/coffeeTypes';
 
 export const SelectCategory = () => {
     const params = useSelector((s: RootState) => s.list.params);
+    const dispatch = useDispatch<appDispatch>();
     const options = [
         {
             value: null,
@@ -34,7 +35,7 @@ export const SelectCategory = () => {
       defaultActiveFirstOption={true}
       placeholder="Выберите категорию напитка"
       optionFilterProp="label"
-      onChange={(value) => {setParams({...params, type: value == null ? undefined : value})}}
+      onChange={(value) => {dispatch(setParams({...params, type: value == null ? undefined : value}))}}
       options={options}
     />
   );

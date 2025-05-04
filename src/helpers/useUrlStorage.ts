@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+
 export const useUrlStorage = <T extends Record<string, string>>(
     params: T,
     setParams: (params: T) => void
