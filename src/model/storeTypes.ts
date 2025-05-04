@@ -1,8 +1,8 @@
 import {
-    CoffeeType,
-    GetCoffeeListReqParams,
-    OrderCoffeeRes,
-    OrderItem,
+  CoffeeType,
+  GetCoffeeListReqParams,
+  OrderCoffeeRes,
+  OrderItem,
 } from "../types/coffeeTypes";
 
 export type ListState = {
@@ -12,7 +12,7 @@ export type ListState = {
 };
 
 export type ListActions = {
-  getCoffeeList: (params?: GetCoffeeListReqParams) => void;
+  getCoffeeList: (params?: GetCoffeeListReqParams) => Promise<CoffeeType[]>;
   setParams: (params?: GetCoffeeListReqParams) => void;
 };
 
